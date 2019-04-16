@@ -114,7 +114,7 @@ public class PurchaseController {
 		return JSON.toJSONString("sucess");
 	}
 	//我发起的采购流程
-	@RequestMapping(value="mypurchaseprocess",method=RequestMethod.GET)
+	@RequestMapping(value="mypurchaseprocess",method=RequestMethod.POST)
 	@ResponseBody
 	public DataGrid<RunningProcess> mypurchaseprocess(HttpSession session,@RequestParam("current") int current,@RequestParam("rowCount") int rowCount){
 		int firstrow=(current-1)*rowCount;
@@ -280,7 +280,7 @@ public class PurchaseController {
 		return new MSG("ok");
 	}
 	
-	@RequestMapping(value="getfinishpurchaseprocess",method=RequestMethod.GET)
+	@RequestMapping(value="getfinishpurchaseprocess",method=RequestMethod.POST)
 	@ResponseBody
 	public DataGrid<HistoryProcess> getHistory(HttpSession session,@RequestParam("current") int current,@RequestParam("rowCount") int rowCount){
 		String userid=(String) session.getAttribute("username");
