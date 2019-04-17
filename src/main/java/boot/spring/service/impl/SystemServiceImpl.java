@@ -106,7 +106,9 @@ public class SystemServiceImpl implements SystemService{
 	public void addrole(Role role, String[] permissionnames) {
 		rolemapper.addRole(role);
 		for(String permissionname:permissionnames){
-			Permission p=permissionmapper.getPermissionByname(permissionname);
+			//Permission p=permissionmapper.getPermissionByname(permissionname);
+			List<Permission> pList = permissionmapper.getPermissions();
+			Permission p = pList.stream().filter(it->it.getPermissionname().equals(permissionname)).findFirst().get();
 			Role_permission rp=new Role_permission();
 			rp.setRole(role);
 			rp.setPermission(p);
@@ -127,7 +129,9 @@ public class SystemServiceImpl implements SystemService{
 	public void updaterole(int rid, String[] permissionnames) {
 		Role role=rolemapper.getRolebyid(rid);
 		for(String permissionname:permissionnames){
-			Permission p=permissionmapper.getPermissionByname(permissionname);
+			//Permission p=permissionmapper.getPermissionByname(permissionname);
+			List<Permission> pList = permissionmapper.getPermissions();
+			Permission p = pList.stream().filter(it->it.getPermissionname().equals(permissionname)).findFirst().get();
 			Role_permission rp=new Role_permission();
 			rp.setRole(role);
 			rp.setPermission(p);
