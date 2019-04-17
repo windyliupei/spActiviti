@@ -20,16 +20,16 @@
     </resultMap>
     
     <select id="getusers" resultMap="userMap">
-    	select * from user order by uid
+    	select * from sys_user order by uid
     </select>
     
     <select id="getUserByid" resultMap="userMap">
-    	select * from user left join user_role on user.uid=user_role.userid left join 
-    	role on user_role.roleid=role.rid where user.uid=#{uid}
+    	select * from sys_user left join user_role on sys_user.uid=user_role.userid left join
+    	role on user_role.roleid=role.rid where sys_user.uid=#{uid}
     </select>
     
     <delete id="deleteuser" parameterType="int">
-    	delete from user where user.uid=#{uid}
+    	delete from sys_user where sys_user.uid=#{uid}
     </delete>
     
     <delete id="deleteuserrole" parameterType="int">
@@ -37,16 +37,16 @@
     </delete>
     
     <insert id="adduser" useGeneratedKeys="true" keyProperty="uid" parameterType="boot.spring.po.User">
-    	 insert into user (username,password,tel,age)
+    	 insert into sys_user (username,password,tel,age)
 	  	 values (#{username},'1234',#{tel},#{age})
     </insert>
     
     <update id="updateuser" parameterType="boot.spring.po.User">
-    	update user set
+    	update sys_user set
     		tel=#{tel},age=#{age}
-    	where user.uid=#{uid}
+    	where sys_user.uid=#{uid}
     </update>
     <select id="getUidByusername" resultType="int" parameterType="String">
-    	select uid from user where username=#{username} 
+    	select uid from sys_user where username=#{username}
     </select>
 </mapper>

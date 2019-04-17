@@ -2,7 +2,7 @@ package boot.spring.po;
 
 public class User_role {
 	int urid;
-	User user;
+	User sys_user;
 	Role role;
 	
 	public int getUrid() {
@@ -12,10 +12,10 @@ public class User_role {
 		this.urid = urid;
 	}
 	public User getUser() {
-		return user;
+		return sys_user;
 	}
 	public void setUser(User user) {
-		this.user = user;
+		this.sys_user = user;
 	}
 	public Role getRole() {
 		return role;

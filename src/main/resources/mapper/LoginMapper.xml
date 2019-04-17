@@ -11,7 +11,7 @@
         <result column="age" property="age" />
     </resultMap>
     <select id="getpwdbyname" parameterType="String"  resultMap="userMap">
-    	select * from user where username=#{name}
+    	select * from sys_user where username=#{name}
     </select>
     
     

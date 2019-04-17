@@ -22,7 +22,7 @@ import boot.spring.po.UserRole;
 import boot.spring.po.User_role;
 import boot.spring.service.SystemService;
 @Service
-@Transactional(propagation=Propagation.REQUIRED,isolation=Isolation.DEFAULT,timeout=5)
+@Transactional(propagation=Propagation.REQUIRED,isolation=Isolation.DEFAULT,timeout=5*20)
 public class SystemServiceImpl implements SystemService{
 	@Autowired
 	UserMapper usermapper;
@@ -58,7 +58,9 @@ public class SystemServiceImpl implements SystemService{
 	public void adduser(User user, String[] rolenames) {
 		usermapper.adduser(user);
 		for(String rolename:rolenames){
-			Role role=rolemapper.getRoleidbyName(rolename);
+			//!Role role=rolemapper.getRoleidbyName(rolename);
+			List<Role> roles=rolemapper.getRoles();
+			Role role = roles.stream().filter(it->it.getRolename().equals(rolename)).findFirst().get();
 			User_role ur=new User_role();
 			ur.setRole(role);
 			ur.setUser(user);
@@ -79,7 +81,9 @@ public class SystemServiceImpl implements SystemService{
 			usermapper.updateuser(user);
 			usermapper.deleteuserrole(uid);
 			for(String rolename:rolenames){
-				Role role=rolemapper.getRoleidbyName(rolename);
+				//!Role role=rolemapper.getRoleidbyName(rolename);
+				List<Role> roles=rolemapper.getRoles();
+				Role role = roles.stream().filter(it->it.getRolename().equals(rolename)).findFirst().get();
 				User_role ur=new User_role();
 				ur.setRole(role);
 				ur.setUser(user);

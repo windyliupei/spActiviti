@@ -16,7 +16,7 @@ import boot.spring.mapper.PurchaseApplyMapper;
 import boot.spring.po.PurchaseApply;
 import boot.spring.service.PurchaseService;
 
-@Transactional(propagation=Propagation.REQUIRED,isolation=Isolation.DEFAULT,timeout=5)
+@Transactional(propagation=Propagation.REQUIRED,isolation=Isolation.DEFAULT,timeout=5*20)
 @Service
 public class PurchaseServiceImpl implements PurchaseService{
 	@Autowired

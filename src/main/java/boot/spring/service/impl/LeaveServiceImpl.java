@@ -25,7 +25,7 @@ import boot.spring.mapper.LeaveApplyMapper;
 import boot.spring.po.LeaveApply;
 import boot.spring.service.LeaveService;
 
-@Transactional(propagation=Propagation.REQUIRED,isolation=Isolation.DEFAULT,timeout=5)
+@Transactional(propagation=Propagation.REQUIRED,isolation=Isolation.DEFAULT,timeout=5*20)
 @Service
 public class LeaveServiceImpl implements LeaveService{
 	@Autowired

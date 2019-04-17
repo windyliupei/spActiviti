@@ -12,7 +12,7 @@ import boot.spring.mapper.LoginMapper;
 import boot.spring.po.User;
 import boot.spring.service.LoginService;
 
-@Transactional(propagation=Propagation.REQUIRED,isolation=Isolation.DEFAULT,timeout=5)
+@Transactional(propagation=Propagation.REQUIRED,isolation=Isolation.DEFAULT,timeout=5*20)
 @Service
 public class LoginServiceImpl implements LoginService{
 	@Autowired

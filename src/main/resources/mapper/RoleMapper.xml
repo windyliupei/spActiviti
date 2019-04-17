@@ -26,10 +26,10 @@
     </select>
     <insert id="adduserrole" useGeneratedKeys="true" keyProperty="urid" parameterType="boot.spring.po.User_role">
     	 insert into user_role (userid,roleid)
-	  	 values (#{user.uid},#{role.rid})
+	  	 values (#{sys_user.uid},#{role.rid})
     </insert>
-    <select id="getRoleidbyName" resultType="boot.spring.po.Role" parameterType="String">
-    	select * from role where rolename=#{rolename}
+    <select id="getRoleidbyName" resultMap="roleMap" parameterType="String">
+    	select * from role where rolename = #{rolename}
     </select>
     <insert id="addRole" useGeneratedKeys="true" keyProperty="rid" parameterType="boot.spring.po.Role">
     	insert into role (rolename) values(#{rolename}) 

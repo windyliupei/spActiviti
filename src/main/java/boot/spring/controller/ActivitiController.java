@@ -84,15 +84,6 @@ public class ActivitiController {
 	
 	@RequestMapping(value="/uploadworkflow",method = RequestMethod.POST)
 	public String fileupload(@RequestParam MultipartFile uploadfile,HttpServletRequest request){
-//		try{
-//			MultipartFile file=uploadfile;
-//			String filename=file.getOriginalFilename();
-//			InputStream is=file.getInputStream();
-//			rep.createDeployment().addInputStream(filename, is).deploy();
-//		}catch(Exception e){
-//			e.printStackTrace();
-//		}
-//		return "index";
 		try{
 			MultipartFile file=uploadfile;
 			String filename=file.getOriginalFilename();
