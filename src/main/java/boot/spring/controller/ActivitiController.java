@@ -373,7 +373,7 @@ public class ActivitiController {
 		return JSON.toJSONString(grid);
 	}
 	
-	@RequestMapping(value="/dealtask",method = RequestMethod.GET)
+	@RequestMapping(value="/dealtask",method = RequestMethod.POST)
 	@ResponseBody
 	public String taskdeal(@RequestParam("taskid") String taskid,HttpServletResponse response){
 		Task task=taskservice.createTaskQuery().taskId(taskid).singleResult();
@@ -387,7 +387,7 @@ public class ActivitiController {
 		return "/activiti/task-deptleaderaudit";
 	}
 	
-	@RequestMapping(value="/task/deptcomplete/{taskid}",method = RequestMethod.GET)
+	@RequestMapping(value="/task/deptcomplete/{taskid}",method = RequestMethod.POST)
 	@ResponseBody
 	public String deptcomplete(HttpSession session,@PathVariable("taskid") String taskid,HttpServletRequest req){
 		String userid=(String) session.getAttribute("username");
