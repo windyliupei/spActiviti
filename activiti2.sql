@@ -41,10 +41,10 @@ CREATE TABLE `leaveapply` (
 -- Dumping data for table `leaveapply`
 --
 
-LOCK TABLES `leaveapply` WRITE;
+
 /*!40000 ALTER TABLE `leaveapply` DISABLE KEYS */;
 /*!40000 ALTER TABLE `leaveapply` ENABLE KEYS */;
-UNLOCK TABLES;
+
 
 --
 -- Table structure for table `permission`
@@ -65,11 +65,11 @@ CREATE TABLE `permission` (
 -- Dumping data for table `permission`
 --
 
-LOCK TABLES `permission` WRITE;
+
 /*!40000 ALTER TABLE `permission` DISABLE KEYS */;
 INSERT INTO `permission` VALUES (2,'人事审批'),(9,'出纳付款'),(8,'总经理审批'),(3,'财务审批'),(1,'部门领导审批'),(15,'采购审批');
 /*!40000 ALTER TABLE `permission` ENABLE KEYS */;
-UNLOCK TABLES;
+
 
 --
 -- Table structure for table `purchase`
@@ -92,10 +92,10 @@ CREATE TABLE `purchase` (
 -- Dumping data for table `purchase`
 --
 
-LOCK TABLES `purchase` WRITE;
+
 /*!40000 ALTER TABLE `purchase` DISABLE KEYS */;
 /*!40000 ALTER TABLE `purchase` ENABLE KEYS */;
-UNLOCK TABLES;
+
 
 --
 -- Table structure for table `role`
@@ -116,11 +116,9 @@ CREATE TABLE `role` (
 -- Dumping data for table `role`
 --
 
-LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
 INSERT INTO `role` VALUES (9,'人事'),(10,'出纳员'),(11,'总经理'),(16,'财务管理员'),(1,'部门经理'),(13,'采购经理');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `role_permission`
@@ -143,11 +141,11 @@ CREATE TABLE `role_permission` (
 -- Dumping data for table `role_permission`
 --
 
-LOCK TABLES `role_permission` WRITE;
+
 /*!40000 ALTER TABLE `role_permission` DISABLE KEYS */;
 INSERT INTO `role_permission` VALUES (27,9,2),(28,10,9),(34,11,2),(35,11,8),(36,11,1),(37,13,15),(39,16,3),(42,1,3);
 /*!40000 ALTER TABLE `role_permission` ENABLE KEYS */;
-UNLOCK TABLES;
+
 
 --
 -- Table structure for table `user`
@@ -168,14 +166,14 @@ CREATE TABLE `sys_user` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `user`
+-- Dumping data for table `sys_user`
 --
 
-LOCK TABLES `sys_user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+
+/*!40000 ALTER TABLE `sys_user` DISABLE KEYS */;
 INSERT INTO `sys_user` VALUES (31,'xiaomi','1234','110',20),(33,'jon','1234','123',23),(34,'xiaocai','1234','111',32),(35,'WANG','1234','222',33);
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
+/*!40000 ALTER TABLE `sys_user` ENABLE KEYS */;
+
 
 --
 -- Table structure for table `user_role`
@@ -196,11 +194,11 @@ CREATE TABLE `user_role` (
 -- Dumping data for table `user_role`
 --
 
-LOCK TABLES `user_role` WRITE;
+
 /*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
 INSERT INTO `user_role` VALUES (47,33,9),(48,33,1),(81,31,9),(82,31,10),(83,31,16),(84,31,1),(85,31,13),(86,35,11),(87,35,1),(92,34,1);
 /*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
-UNLOCK TABLES;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
