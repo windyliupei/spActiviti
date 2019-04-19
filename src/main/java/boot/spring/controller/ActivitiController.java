@@ -399,7 +399,7 @@ public class ActivitiController {
 		return JSON.toJSONString("success");
 	}
 	
-	@RequestMapping(value="/task/hrcomplete/{taskid}",method = RequestMethod.GET)
+	@RequestMapping(value="/task/hrcomplete/{taskid}",method = RequestMethod.POST)
 	@ResponseBody
 	public String hrcomplete(HttpSession session,@PathVariable("taskid") String taskid,HttpServletRequest req){
 		String userid=(String) session.getAttribute("username");
@@ -411,7 +411,7 @@ public class ActivitiController {
 		return JSON.toJSONString("success");
 	}
 	
-	@RequestMapping(value="/task/reportcomplete/{taskid}",method = RequestMethod.GET)
+	@RequestMapping(value="/task/reportcomplete/{taskid}",method = RequestMethod.POST)
 	@ResponseBody
 	public String reportbackcomplete(@PathVariable("taskid") String taskid,HttpServletRequest req){
 		String realstart_time=req.getParameter("realstart_time");
@@ -485,7 +485,7 @@ public class ActivitiController {
 	}
 	
 	
-	@RequestMapping(value="/processinfo",method = RequestMethod.GET)
+	@RequestMapping(value="/processinfo",method = RequestMethod.POST)
 	@ResponseBody
 	public List<HistoricActivityInstance> processinfo(@RequestParam("instanceid")String instanceid){
 		  List<HistoricActivityInstance> his = histiryservice.createHistoricActivityInstanceQuery().processInstanceId(instanceid).orderByHistoricActivityInstanceStartTime().asc().list();
