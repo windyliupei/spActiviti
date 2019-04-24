@@ -30,6 +30,7 @@ import org.activiti.engine.task.Task;
 import org.activiti.image.impl.DefaultProcessDiagramGenerator;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -76,6 +77,12 @@ public class ActivitiController {
 	HistoryService histiryservice;
 	@Autowired
 	SystemService systemservice;
+
+	@Value("${activiti.currentProcess.name}")
+	String currentProcessName;
+
+	@Value("${activiti.currentProcess.deptleaderapprove}")
+	String deptleaderapprove;
 	
 	@RequestMapping(value="/processlist",method = RequestMethod.GET)
 	String process(){
@@ -393,7 +400,8 @@ public class ActivitiController {
 		String userid=(String) session.getAttribute("username");
 		Map<String,Object> variables=new HashMap<String,Object>();
 		String approve=req.getParameter("deptleaderapprove");
-		variables.put("deptleaderapprove", approve);
+		variables.put(deptleaderapprove, approve);
+		taskservice.setVariable(taskid,"comeFrom","Manager");
 		taskservice.claim(taskid, userid);
 		taskservice.complete(taskid, variables);
 		return JSON.toJSONString("success");
@@ -406,6 +414,8 @@ public class ActivitiController {
 		Map<String,Object> variables=new HashMap<String,Object>();
 		String approve=req.getParameter("hrapprove");
 		variables.put("hrapprove", approve);
+		//variables.put("comeFrom","HR");
+		taskservice.setVariable(taskid,"comeFrom","HR");
 		taskservice.claim(taskid, userid);
 		taskservice.complete(taskid, variables);
 		return JSON.toJSONString("success");
@@ -420,7 +430,7 @@ public class ActivitiController {
 		return JSON.toJSONString("success");
 	}
 	
-	@RequestMapping(value="/task/updatecomplete/{taskid}",method = RequestMethod.GET)
+	@RequestMapping(value="/task/updatecomplete/{taskid}",method = RequestMethod.POST)
 	@ResponseBody
 	public String updatecomplete(@PathVariable("taskid") String taskid,@ModelAttribute("leave") LeaveApply leave,@RequestParam("reapply") String reapply){
 		leaveservice.updatecomplete(taskid,leave,reapply);
@@ -434,7 +444,7 @@ public class ActivitiController {
 		String userid=(String) session.getAttribute("username");
 		ProcessInstanceQuery query = runservice.createProcessInstanceQuery();
 		int total= (int) query.count();
-		List<ProcessInstance> a = query.processDefinitionKey("leave").involvedUser(userid).listPage(firstrow, rowCount);
+		List<ProcessInstance> a = query.processDefinitionKey(currentProcessName).involvedUser(userid).listPage(firstrow, rowCount);
 		List<RunningProcess> list=new ArrayList<RunningProcess>();
 		for(ProcessInstance p:a){
 			RunningProcess process=new RunningProcess();
@@ -456,7 +466,7 @@ public class ActivitiController {
 	@ResponseBody
 	public DataGrid<HistoryProcess> getHistory(HttpSession session,@RequestParam("current") int current,@RequestParam("rowCount") int rowCount){
 		String userid=(String) session.getAttribute("username");
-		HistoricProcessInstanceQuery process = histiryservice.createHistoricProcessInstanceQuery().processDefinitionKey("leave").startedBy(userid).finished();
+		HistoricProcessInstanceQuery process = histiryservice.createHistoricProcessInstanceQuery().processDefinitionKey(currentProcessName).startedBy(userid).finished();
 		int total= (int) process.count();
 		int firstrow=(current-1)*rowCount;
 		List<HistoricProcessInstance> info = process.listPage(firstrow, rowCount);
@@ -540,7 +550,7 @@ public class ActivitiController {
 		System.out.print(userid);
 		ProcessInstanceQuery query = runservice.createProcessInstanceQuery();
 		int total= (int) query.count();
-		List<ProcessInstance> a = query.processDefinitionKey("leave").involvedUser(userid).listPage(firstrow, rowCount);
+		List<ProcessInstance> a = query.processDefinitionKey(currentProcessName).involvedUser(userid).listPage(firstrow, rowCount);
 		List<RunningProcess> list=new ArrayList<RunningProcess>();
 		for(ProcessInstance p:a){
 			RunningProcess process=new RunningProcess();

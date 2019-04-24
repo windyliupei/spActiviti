@@ -16,6 +16,8 @@ import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -25,6 +27,7 @@ import boot.spring.mapper.LeaveApplyMapper;
 import boot.spring.po.LeaveApply;
 import boot.spring.service.LeaveService;
 
+@PropertySource(value="classpath:application.properties",encoding = "UTF-8")
 @Transactional(propagation=Propagation.REQUIRED,isolation=Isolation.DEFAULT,timeout=5*20)
 @Service
 public class LeaveServiceImpl implements LeaveService{
@@ -36,6 +39,14 @@ public class LeaveServiceImpl implements LeaveService{
 	RuntimeService runtimeservice;
 	@Autowired
 	TaskService taskservice;
+
+	@Value("${activiti.currentProcess.name}")
+	String currentProcessName;
+
+	@Value("${activiti.currentProcess.reapply}")
+	String reapplyText;
+
+	String reapply;
 	
 	public ProcessInstance startWorkflow(LeaveApply apply, String userid, Map<String, Object> variables) {
 		apply.setApply_time(new Date().toString());
@@ -43,7 +54,7 @@ public class LeaveServiceImpl implements LeaveService{
 		leavemapper.save(apply);
 		String businesskey=String.valueOf(apply.getId());//使用leaveapply表的主键作为businesskey,连接业务数据和流程数据
 		identityservice.setAuthenticatedUserId(userid);
-		ProcessInstance instance=runtimeservice.startProcessInstanceByKey("leave",businesskey,variables);
+		ProcessInstance instance=runtimeservice.startProcessInstanceByKey(currentProcessName,businesskey,variables);
 		System.out.println(businesskey);
 		String instanceid=instance.getId();
 		apply.setProcess_instance_id(instanceid);
@@ -115,7 +126,8 @@ public class LeaveServiceImpl implements LeaveService{
 	
 	public List<LeaveApply> getpageupdateapplytask(String userid,int firstrow,int rowcount) {
 		List<LeaveApply> results=new ArrayList<LeaveApply>();
-		List<Task> tasks=taskservice.createTaskQuery().taskCandidateOrAssigned(userid).taskName("调整申请").listPage(firstrow, rowcount);
+		String reapply = reapplyText == "1" ? "调整申请":"重新申请";
+		List<Task> tasks=taskservice.createTaskQuery().taskCandidateOrAssigned(userid).taskName(reapply).listPage(firstrow, rowcount);
 		for(Task task:tasks){
 			String instanceid=task.getProcessInstanceId();
 			ProcessInstance ins=runtimeservice.createProcessInstanceQuery().processInstanceId(instanceid).singleResult();
@@ -128,7 +140,8 @@ public class LeaveServiceImpl implements LeaveService{
 	}
 	
 	public int getallupdateapplytask(String userid) {
-		List<Task> tasks=taskservice.createTaskQuery().taskCandidateOrAssigned(userid).taskName("调整申请").list();
+		String reapply = reapplyText == "1" ? "调整申请":"重新申请";
+		List<Task> tasks=taskservice.createTaskQuery().taskCandidateOrAssigned(userid).taskName(reapply).list();
 		return tasks.size();
 	}
 	
@@ -155,12 +168,32 @@ public class LeaveServiceImpl implements LeaveService{
 		a.setEnd_time(leave.getEnd_time());
 		a.setReason(leave.getReason());
 		Map<String,Object> variables=new HashMap<String,Object>();
-		variables.put("reapply", reapply);
+
+		boolean iscomeFromHR = false;
+		boolean iscomeFromManager = false;
+
+		String comeFrom = (String) taskservice.getVariable(task.getId(), "comeFrom");
+		if ("HR".equals(comeFrom)){
+			iscomeFromHR = true;
+		}else {
+			iscomeFromManager = true;
+		}
+
+
+
 		if(reapply.equals("true")){
-			leavemapper.update(a);
+			//leavemapper.update(a);
+			if (iscomeFromHR){
+				variables.put("goto", "hr");
+			}else if(iscomeFromManager) {
+				variables.put("goto", "manager");
+			}
 			taskservice.complete(taskid,variables);
-		}else
+		}else{
+			variables.put("goto", "end");
 			taskservice.complete(taskid,variables);
+		}
+
 	}
 	
 	public List<String> getHighLightedFlows(  
